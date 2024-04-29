@@ -6,6 +6,18 @@ services:
       - "8000:8000"
     volumes:
       - ./back:/back
-
+    environment:
+      - DB_HOST=database
+      - DB_NAME=runbase
+      - DB_USER=dbuser
+      - DB_PASS=Kflf2208Djdf2308!
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - database
+  database:
+    image: postgres:15.0-alpine
+    environment:
+      - POSTGRES_DB=runbase
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=Kflf2208Djdf2308!
