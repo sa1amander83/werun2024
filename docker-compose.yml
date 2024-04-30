@@ -5,7 +5,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./back:/back
+      - ./runapp:/runapp
     environment:
       - DB_HOST=database
       - DB_NAME=runbase
@@ -21,3 +21,63 @@ services:
       - POSTGRES_DB=runbase
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=Kflf2208Djdf2308!
+
+
+  redis:
+    image: redis:7.0.5-alpine
+    hostname: redis
+
+  worker:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./runapp:/runapp
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+
+    environment:
+      - DB_HOST=database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=Kflf2208Djdf2308!
+
+  worker2:
+    build:
+      context: .
+    hostname: worker2
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./runapp:/runapp
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+
+    environment:
+      - DB_HOST=database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=pass
+
+  flower:
+    build:
+      context: .
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower
+    volumes:
+      - ./runapp:/runapp
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
