@@ -12,7 +12,7 @@ colorama==0.4.6
 Django==5.0.4
 django-cachalot==2.6.2
 django-redis==5.2.0
-flower==1.2.0
+flower==2.0.1
 humanize==4.9.0
 kombu==5.3.7
 prometheus_client==0.20.0
@@ -26,3 +26,4 @@ typing_extensions==4.11.0
 tzdata==2024.1
 vine==5.1.0
 wcwidth==0.2.13
+pillow==10.3.0
