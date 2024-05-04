@@ -7,21 +7,23 @@ services:
     volumes:
       - ./runapp:/runapp
     environment:
-      - DB_HOST=database
+      - DB_HOST=postgres
       - DB_NAME=runbase
       - DB_USER=dbuser
       - DB_PASS=Kflf2208Djdf2308!
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
     depends_on:
-      - database
-  database:
+      - postgres
+  postgres:
     image: postgres:15.0-alpine
+    restart: always
     environment:
       - POSTGRES_DB=runbase
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=Kflf2208Djdf2308!
-
+    ports:
+      - "54320:5432"
 
   redis:
     image: redis:7.2.4-alpine
@@ -39,11 +41,11 @@ services:
       - redis
     depends_on:
       - redis
-      - database
+      - postgres
 
     environment:
-      - DB_HOST=database
-      - DB_NAME=dbname
+      - DB_HOST=postgres
+      - DB_NAME=runbase
       - DB_USER=dbuser
       - DB_PASS=Kflf2208Djdf2308!
 
@@ -59,11 +61,11 @@ services:
       - redis
     depends_on:
       - redis
-      - database
+      - postgres
 
     environment:
-      - DB_HOST=database
-      - DB_NAME=dbname
+      - DB_HOST=postgres
+      - DB_NAME=runbase
       - DB_USER=dbuser
       - DB_PASS=pass
 
