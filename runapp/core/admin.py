@@ -3,7 +3,19 @@ from unittest import runner
 from django.contrib import admin
 
 # Register your models here.
-from core.models import Runner
+from core.models import Runner, Teams
+
+
+class TeamsAdmin(admin.ModelAdmin):
+    search_fields = ('team',)
+    list_display = ('team',)
+    list_display_links = ('team',)
+
+    list_filter = ('team',)
+    ordering = ('team',)
+    list_per_page = 50
+    list_max_show_all = 100
+
 
 class RunnerAdmin(admin.ModelAdmin):
     # resource_class = TeamsAdmin
@@ -28,7 +40,7 @@ class RunnerAdmin(admin.ModelAdmin):
     # fields = ('пробег_за_день', 'дистанция_за_день', 'время_пробега', 'средний_темп',)
     search_fields = (
         'user__username', 'runner_team__team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22')
-    list_editable = ('runner_age', 'runner_category', 'runner_gender', 'zabeg22','zabeg23')
+    list_editable = ('runner_age', 'runner_category', 'runner_gender', 'zabeg22', 'zabeg23')
     list_display = ('user', 'runner_team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22', 'zabeg23')
     # 'пробег_за_день','дистанция_за_день', 'время_пробега', 'средний_темп',)
     # list_display = ('user', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22', )
@@ -40,4 +52,6 @@ class RunnerAdmin(admin.ModelAdmin):
     list_per_page = 50
     list_max_show_all = 50
 
+
+admin.site.register(Teams, TeamsAdmin)
 admin.site.register(Runner, RunnerAdmin)

@@ -1,3 +1,13 @@
+FROM node:22-alpine3.19
+WORKDIR /runapp
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . ./
+WORKDIR /runapp
+
+
+
+
 FROM python:3.10-alpine3.19
 
 COPY requirements.txt /temp/requirements.txt
@@ -16,6 +26,9 @@ RUN adduser --disabled-password new-user
 USER new-user
 
 
+
+
+#CMD npm start
 #FROM node:20-slim AS base
 #ENV PNPM_HOME="/pnpm"
 #ENV PATH="$PNPM_HOME:$PATH"

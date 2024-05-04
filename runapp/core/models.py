@@ -41,7 +41,7 @@ class Runner(models.Model):
     zabeg23 = models.BooleanField(verbose_name='Участник МыZaБег 2023', default=False)
     # category_updated = models.PositiveIntegerField(verbose_name='Начальная группа', choices=CATEGORY, blank=True,
     #                                                null=True)
-    completed = models.BooleanField(default=False, verbose_name="Выполнена квал-я")
+    # completed = models.BooleanField(default=False, verbose_name="Выполнена квал-я", )
 
     def __str__(self):
         return str(self.user)
