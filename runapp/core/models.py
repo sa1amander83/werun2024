@@ -39,6 +39,8 @@ class Runner(models.Model):
     runner_gender = models.CharField(max_length=1, choices=GENDER, verbose_name='пол участника', default='м')
     zabeg22 = models.BooleanField(verbose_name='Участник МыZaБег 2022', default=False)
     zabeg23 = models.BooleanField(verbose_name='Участник МыZaБег 2023', default=False)
+    family= models.ManyToManyField(User,verbose_name='выберите участников', related_name='family_users')
+
     # category_updated = models.PositiveIntegerField(verbose_name='Начальная группа', choices=CATEGORY, blank=True,
     #                                                null=True)
     # completed = models.BooleanField(default=False, verbose_name="Выполнена квал-я", )
