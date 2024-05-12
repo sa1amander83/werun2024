@@ -39,19 +39,20 @@ class RunnerAdmin(admin.ModelAdmin):
 
     # fields = ('пробег_за_день', 'дистанция_за_день', 'время_пробега', 'средний_темп',)
     search_fields = (
-        'user__username', 'runner_team__team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22')
+        'runner', 'runner_team__team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22')
     list_editable = ('runner_age', 'runner_category', 'runner_gender', 'zabeg22', 'zabeg23')
-    list_display = ('user', 'runner_team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22', 'zabeg23')
+    list_display = ('runner', 'runner_team', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22', 'zabeg23')
     # 'пробег_за_день','дистанция_за_день', 'время_пробега', 'средний_темп',)
     # list_display = ('user', 'runner_age', 'runner_category', 'runner_gender', 'zabeg22', )
-    list_display_links = ('user', 'runner_team',)
+    list_display_links = ('runner', 'runner_team',)
 
     # list_filter = ('runner_category','category_updated','completed', 'is_admin', 'runner_team',)
-    ordering = ('user__username',)
+    ordering = ('runner',)
 
     list_per_page = 50
     list_max_show_all = 50
-
+    def __str__(self):
+        return str(self.runner)
 
 admin.site.register(Teams, TeamsAdmin)
 admin.site.register(Runner, RunnerAdmin)

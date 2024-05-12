@@ -14,12 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path, include, re_path
+# from django.urls import path, include, re_path as url
+from django.urls import re_path, include, path
+
 from rest_framework.routers import DefaultRouter
 # from core.views import index, RunnersListCreate,RunnersListSet
-from core.views import index, runners_list,runners_detail
-
+from core.views import index, runners_list, runners_detail, RegisterView, CreateUserView
 
 router = DefaultRouter()
 
@@ -28,10 +30,14 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^api/runners/$', runners_list),
-    re_path(r'^api/runners/([0-9])$', runners_detail),
+    path(r'^api/runners/$', runners_list),
+    path(r'^api/runners/([0-9])$', runners_detail),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('login/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    # path('registration/', include('dj_rest_auth.registration.urls')),
+    path('registration/',  RegisterView.as_view(), name='rest_register'),
+    path('registr/',  CreateUserView.as_view(), name='rester_register'),
 
-    # path('', include('core.urls')),
     # path("__reload__/", include("django_browser_reload.urls")),
-
 ]
