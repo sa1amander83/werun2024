@@ -51,8 +51,7 @@ class RunnerAdmin(admin.ModelAdmin):
 
     list_per_page = 50
     list_max_show_all = 50
-    def __str__(self):
-        return str(self.runner)
+
 
 admin.site.register(Teams, TeamsAdmin)
 admin.site.register(Runner, RunnerAdmin)

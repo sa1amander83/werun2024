@@ -2,9 +2,10 @@ from allauth.account.utils import complete_signup
 from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
-
+User = settings.AUTH_USER_MODEL
 
 # Create your views here.
 from django.utils.decorators import method_decorator
@@ -13,7 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
-from core.models import Runner
+from core.models import User
 from core.serializers import RunnerSerializer, CustomRegisterSerializer, UserSerializer
 
 
@@ -27,7 +28,7 @@ from rest_framework import generics, viewsets, status, permissions
 @api_view(['GET', 'POST'])
 def runners_list(request):
     if request.method == 'GET':
-        data = Runner.objects.all()
+        data = User.objects.all()
 
         serializer = RunnerSerializer(data, context={'request': request}, many=True)
 
@@ -45,8 +46,8 @@ def runners_list(request):
 @api_view(['PUT', 'DELETE'])
 def runners_detail(request, pk):
     try:
-        runner = Runner.objects.get(id=pk)
-    except Runner.DoesNotExist:
+        runner = User.objects.get(id=pk)
+    except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
