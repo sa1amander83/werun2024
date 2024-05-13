@@ -3,12 +3,12 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from core.models import Runner
+from core.models import User
 
 
 class RunnerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Runner
+        model = User
         fields = ('__all__')
 
 class UserSerializer(serializers.ModelSerializer):
@@ -41,7 +41,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     email=False
 
     class Meta:
-        model = Runner
+        model = User
         fields = ['runner', 'team']
 
     def get_cleaned_data(self):

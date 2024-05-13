@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 # from django.urls import path, include, re_path as url
-from django.urls import re_path, include, path
+from django.urls import re_path, include, path, re_path
 
 from rest_framework.routers import DefaultRouter
 # from core.views import index, RunnersListCreate,RunnersListSet
@@ -30,8 +30,8 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'^api/runners/$', runners_list),
-    path(r'^api/runners/([0-9])$', runners_detail),
+    re_path(r'^api/runners/$', runners_list),
+    re_path(r'^api/runners/([0-9])$', runners_detail),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('login/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),

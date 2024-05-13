@@ -51,9 +51,9 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1']
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',  # The default port for create-react-app
-]
+CORS_ORIGIN_WHITELIST = (u'http://localhost:8888',
+    u'http://127.0.0.1:8000',)
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -235,3 +235,4 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ]
 }
+

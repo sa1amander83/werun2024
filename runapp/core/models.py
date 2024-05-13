@@ -1,5 +1,10 @@
-from django.contrib.auth.models import User
+from django.conf import settings
+
+from django.contrib.auth.models import User, AbstractUser, PermissionsMixin
 from django.db import models
+
+from django.utils.translation import gettext_lazy as _
+
 
 
 class Teams(models.Model):
@@ -17,11 +22,7 @@ class Teams(models.Model):
 
 
 class Runner(models.Model):
-    class Meta:
-        verbose_name = 'участник'
-        verbose_name_plural = "участники"
 
-    USERNAME_FIELD = 'user'
 
     GENDER = [
         ('м', "м"), ("ж", "ж")
@@ -30,8 +31,8 @@ class Runner(models.Model):
         (1, 'Новичок - 50 км'), (2, 'Легкий - 100 км'), (3, 'Средний - 200 км'), (4, 'Тяжелый - 400 км'),
         (5, 'Ультра - 900 км')
     ]
-    runner = models.PositiveIntegerField(verbose_name='Номер участника', db_index=True, unique=True)
-    nickname= models.CharField(max_length=12, verbose_name='никнейм',null=True)
+
+    runner= models.ForeignKey(User, on_delete=models.CASCADE, max_length=12,verbose_name='Номер участника')
     runner_team = models.ForeignKey(Teams, on_delete=models.DO_NOTHING, verbose_name='команда', db_index=True)
     runner_age = models.PositiveIntegerField(verbose_name='возраст', db_index=True)
     runner_category = models.PositiveIntegerField(verbose_name='Заявляетесь в группу', choices=CATEGORY, default=1,
@@ -39,11 +40,15 @@ class Runner(models.Model):
     runner_gender = models.CharField(max_length=1, choices=GENDER, verbose_name='пол участника', default='м')
     zabeg22 = models.BooleanField(verbose_name='Участник МыZaБег 2022', default=False)
     zabeg23 = models.BooleanField(verbose_name='Участник МыZaБег 2023', default=False)
-    family= models.ManyToManyField(User,verbose_name='выберите участников', related_name='family_users',blank=True)
+    family = models.ManyToManyField(to=User, verbose_name='выберите участников',
+                                    related_name='family_users', blank=True)
 
     # category_updated = models.PositiveIntegerField(verbose_name='Начальная группа', choices=CATEGORY, blank=True,
     #                                                null=True)
     # completed = models.BooleanField(default=False, verbose_name="Выполнена квал-я", )
+    class Meta:
+        verbose_name = 'участник'
+        verbose_name_plural = "участники"
 
     def __str__(self):
         return str(self.runner)
