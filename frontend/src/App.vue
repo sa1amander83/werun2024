@@ -51,7 +51,7 @@ export default {
         </div>
 
       <div class="flex">
-        <div class="w-64 bg-gray-500">
+        <div class="col-3">
           left
         </div>
         <div>

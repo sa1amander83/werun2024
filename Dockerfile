@@ -1,14 +1,4 @@
-FROM node:22-alpine3.19
-WORKDIR /runapp
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . ./
-WORKDIR /runapp
-
-
-
-
-FROM python:3.10-alpine3.19
+FROM python:3.10-alpine3.19 as builder
 
 COPY requirements.txt /temp/requirements.txt
 
@@ -24,6 +14,7 @@ RUN pip install -r /temp/requirements.txt
 RUN adduser --disabled-password new-user
 #RUN -p 127.0.0.1:16379:6379 --name redis-celery -d redis
 USER new-user
+
 
 
 
