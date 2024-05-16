@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from core.views import index,  RunnersListCreate
+from core.views import index
 
 urlpatterns = [
 

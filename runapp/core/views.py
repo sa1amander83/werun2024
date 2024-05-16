@@ -2,9 +2,13 @@ from allauth.account.utils import complete_signup
 from dj_rest_auth.app_settings import api_settings
 from dj_rest_auth.models import TokenModel
 from dj_rest_auth.utils import jwt_encode
+from dj_rest_auth.views import sensitive_post_parameters_m
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.views import APIView
+
 User = settings.AUTH_USER_MODEL
 
 # Create your views here.
@@ -15,12 +19,20 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from core.models import User
-from core.serializers import RunnerSerializer, CustomRegisterSerializer, UserSerializer
+from core.serializers import RunnerSerializer, CustomRegisterSerializer, UserSerializer, RegisterSerializer
 
 
 def index(request):
     return render(request, 'core/base.html')
 
+
+from django.conf import settings
+
+from rest_framework.permissions import AllowAny
+from dj_rest_auth.registration.serializers import (
+    RegisterSerializer as DefaultRegisterSerializer)
+
+serializers = getattr(settings, 'REST_AUTH_REGISTER_SERIALIZERS', {})
 
 from rest_framework import generics, viewsets, status, permissions
 
@@ -35,7 +47,7 @@ def runners_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = RunnerSerializer.Serializer(data=request.data)
+        serializer = RunnerSerializer.serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
@@ -51,7 +63,7 @@ def runners_detail(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PUT':
-        serializer = RunnerSerializer(runner, data=request.data,context={'request': request})
+        serializer = RunnerSerializer(runner, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -60,7 +72,10 @@ def runners_detail(request, pk):
     elif request.method == 'DELETE':
         runner.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 from allauth.account import app_settings as allauth_account_settings
+
 #
 # class RunnersListCreate(generics.ListCreateAPIView):
 #     queryset = Runner.objects.all()
@@ -73,6 +88,19 @@ from allauth.account import app_settings as allauth_account_settings
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters('password1', 'password2'),
 )
+
+
+
+class  UserCreate(APIView):
+    permission_classes = api_settings.REGISTER_PERMISSION_CLASSES
+    def post(self, request, format='json'):
+        serializer=CustomRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user =serializer.save(request)
+            if user:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class RegisterView(CreateAPIView):
     serializer_class = CustomRegisterSerializer
     permission_classes = api_settings.REGISTER_PERMISSION_CLASSES
@@ -138,9 +166,18 @@ class RegisterView(CreateAPIView):
 
 
 class CreateUserView(CreateAPIView):
-
     model = get_user_model()
     permission_classes = [
-        permissions.AllowAny # Or anon users can't register
+        permissions.AllowAny  # Or anon users can't register
     ]
     serializer_class = UserSerializer
+
+
+class LoginView(CreateAPIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    serializer_class = CustomRegisterSerializer
+    template_name = "register.html"
+
+    def get(self, request, *args, **kwargs):
+        return Response({"serializer": self.get_serializer()})
+

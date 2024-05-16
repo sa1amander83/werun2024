@@ -31,7 +31,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
-
+    'allauth',
+    'allauth.account',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,22 +43,33 @@ INSTALLED_APPS = [
     'core',
     'corsheaders',
     'rest_framework',
-    'allauth',
-    'allauth.account',
+    'users',
+    'djoser',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'rest_framework.authtoken',
+    'django_celery_results',
+    'profiles',
+    'djvue'
 
 ]
+
+AUTHENTICATION_BACKENDS = [
+
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+
 SITE_ID = 1
 CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1']
 CORS_ORIGIN_WHITELIST = (u'http://localhost:8888',
-    u'http://127.0.0.1:8000',)
+                         u'http://127.0.0.1:8000',)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    'allauth.account.middleware.AccountMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -72,8 +84,9 @@ ROOT_URLCONF = 'runapp.urls'
 DJ_REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'core.serializers.CustomRegisterSerializer'
 }
-
-
+EST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'cpre.serializers.CustomRegisterSerializer',
+}
 REST_AUTH = {
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
@@ -109,10 +122,6 @@ REST_AUTH = {
     'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': False,
 }
 
-
-
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -145,10 +154,15 @@ WSGI_APPLICATION = 'runapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PORT': '5432',
+        'PASSWORD': '123'
+        # 'HOST': os.environ.get('DB_HOST'),
+        # 'NAME': os.environ.get('DB_NAME'),
+        # 'USER': os.environ.get('DB_USER'),
+        # 'PASSWORD': os.environ.get('DB_PASS'),
 
     }
 }
@@ -229,10 +243,13 @@ CACHES = {
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 
+AUTH_USER_MODEL = 'core.customuser'

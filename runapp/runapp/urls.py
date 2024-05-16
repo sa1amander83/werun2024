@@ -17,11 +17,12 @@ Including another URLconf
 
 from django.contrib import admin
 # from django.urls import path, include, re_path as url
+from django.template.defaulttags import url
 from django.urls import re_path, include, path, re_path
 
 from rest_framework.routers import DefaultRouter
 # from core.views import index, RunnersListCreate,RunnersListSet
-from core.views import index, runners_list, runners_detail, RegisterView, CreateUserView
+from core.views import index, runners_list, runners_detail, RegisterView, CreateUserView, UserCreate
 
 router = DefaultRouter()
 
@@ -29,6 +30,7 @@ router = DefaultRouter()
 # router.register(r'runset', RunnersListSet)
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     re_path(r'^api/runners/$', runners_list),
     re_path(r'^api/runners/([0-9])$', runners_detail),
@@ -37,7 +39,12 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     # path('registration/', include('dj_rest_auth.registration.urls')),
     path('registration/',  RegisterView.as_view(), name='rest_register'),
+    # path('registration/',  UserCreate.as_view(), name='rest_register'),
     path('registr/',  CreateUserView.as_view(), name='rester_register'),
+    path('profile/',  include('profiles.urls')),
+    path('api/v1/', include('djoser.urls')),
+    path('api/v1/', include('djoser.urls.authtoken')),
+    path('', include('djvue.urls')),
 
     # path("__reload__/", include("django_browser_reload.urls")),
 ]
