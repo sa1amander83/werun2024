@@ -6,6 +6,7 @@ from dj_rest_auth.views import sensitive_post_parameters_m
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.views import APIView
 
 User = settings.AUTH_USER_MODEL
@@ -170,3 +171,13 @@ class CreateUserView(CreateAPIView):
         permissions.AllowAny  # Or anon users can't register
     ]
     serializer_class = UserSerializer
+
+
+class LoginView(CreateAPIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    serializer_class = CustomRegisterSerializer
+    template_name = "register.html"
+
+    def get(self, request, *args, **kwargs):
+        return Response({"serializer": self.get_serializer()})
+

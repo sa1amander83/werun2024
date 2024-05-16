@@ -23,23 +23,21 @@ from rest_framework import serializers
 from requests.exceptions import HTTPError
 
 UserModel = get_user_model()
+
+
 class RunnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('__all__')
 
-class UserSerializer(serializers.ModelSerializer):
 
+class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
-
-
     def create(self, validated_data):
-
         user = User.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-
 
         )
 
@@ -48,7 +46,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # Tuple of serialized model fields (see link [2])
-        fields = ( "username", "password" )
+        fields = ("username", "password")
+
 
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(
@@ -63,7 +62,6 @@ class RegisterSerializer(serializers.Serializer):
     def validate_username(self, username):
         username = get_adapter().clean_username(username)
         return username
-
 
     def validate_password1(self, password):
         return get_adapter().clean_password(password)
@@ -83,11 +81,22 @@ class RegisterSerializer(serializers.Serializer):
 
         }
 
+
 class CustomRegisterSerializer(RegisterSerializer):
+    password1 = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password', 'placeholder': 'Введите пароль'}
+    )
+    password2 = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password', 'placeholder': 'Повторите пароль'}
+    )
     runner_team = serializers.IntegerField(max_value=1000)
     runner_age = serializers.IntegerField(min_value=15, max_value=90)
-    runner_category = serializers.ChoiceField(choices=CustomUser.CATEGORY)
     runner_gender = serializers.ChoiceField(choices=CustomUser.GENDER)
+    runner_category = serializers.ChoiceField(choices=CustomUser.CATEGORY)
     zabeg22 = serializers.BooleanField()
     zabeg23 = serializers.BooleanField()
 
@@ -101,6 +110,7 @@ class CustomRegisterSerializer(RegisterSerializer):
             'username': self.validated_data.get('username', ''),
             'password1': self.validated_data.get('password1', ''),
             'password2': self.validated_data.get('password2', ''),
+
             'runner_team': self.validated_data.get('runner_team'),
             'runner_age': self.validated_data.get('runner_age'),
             'runner_category': self.validated_data.get('runner_category'),
@@ -117,7 +127,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         self.cleaned_data = self.get_cleaned_data()
         user.username = self.cleaned_data.get('username')
         user.runner_team = self.cleaned_data.get('runner_team')
-        user.email=False
+        user.email = False
         user.runner_age = self.cleaned_data.get('runner_age')
         user.runner_category = self.cleaned_data.get('runner_category')
         user.runner_gender = self.cleaned_data.get('runner_gender')

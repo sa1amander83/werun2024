@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'users',
+    'djoser',
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'rest_framework.authtoken',
     'django_celery_results',
+    'profiles',
+    'djvue'
 
 ]
 
@@ -240,10 +243,12 @@ CACHES = {
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 

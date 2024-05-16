@@ -3,7 +3,9 @@ from unittest import runner
 from django.contrib import admin
 
 # Register your models here.
-from core.models import CustomUser, Teams
+from django.contrib.admin import display
+
+from core.models import CustomUser, Teams, Family
 
 
 class TeamsAdmin(admin.ModelAdmin):
@@ -52,6 +54,25 @@ class RunnerAdmin(admin.ModelAdmin):
     list_per_page = 50
     list_max_show_all = 50
 
+
+class UsersInline(admin.TabularInline):
+    model = Family.runner_family.through
+    # model=Family
+    extra = 1
+
+@admin.register(Family)
+class FamilyAdmin(admin.ModelAdmin):
+    class Meta:
+        verbose_name = 'Семья'
+
+
+    def __str__(self):
+        return str(self.username)
+
+    inlines = (UsersInline,)
+    list_display=["runner" ]
+
+    filter_horizontal=('runner_family',)
 
 admin.site.register(Teams, TeamsAdmin)
 admin.site.register(CustomUser, RunnerAdmin)

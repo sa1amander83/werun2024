@@ -19,15 +19,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
-
+ {
+      path: '/profile:number',
+      name: 'profiles',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../components/profiles/Profile.vue')
+    },
     {
       path: '/registration',
       name: 'registration',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: Registration
-      // component: () => import('../views/Registration.vue')
+      // component: Registration
+      component: () => import('@/components/auth/Registration.vue')
     },
 
  {
@@ -39,4 +46,14 @@ const router = createRouter({
   ]
 })
 
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requireLogin) && !store.state.isAuthenticated) {
+//     next('/log-in')
+//   } else {
+//     next()
+//   }
+// })
+
 export default router
+
