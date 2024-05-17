@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'django_celery_results',
     'profiles',
-    'djvue'
+
 
 ]
 
@@ -62,9 +62,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
-CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'http://127.0.0.1','http://localhost:5173/']
 CORS_ORIGIN_WHITELIST = (u'http://localhost:8888',
-                         u'http://127.0.0.1:8000',)
+                         u'http://127.0.0.1:8000',
+
+                         )
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

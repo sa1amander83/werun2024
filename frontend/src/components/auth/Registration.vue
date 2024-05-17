@@ -85,7 +85,7 @@
           </div>
 
 
-          <div class="notification is-danger" v-if="errors.length">
+          <div class="notification is-danger danger" v-if="errors.length">
             <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
           </div>
 
@@ -170,9 +170,11 @@ export default {
         }
 
              axios
-          .post(this.store.state.endpoints.obtainJWT, formData)
+          .post('http://localhost:8000/registration', formData)
+          // .post(this.store.state.endpoints.obtainJWT, formData)
           .then((response) => {
-            this.store.commit("updateToken", response.data.token);
+            console.log(formData)
+            // this.store.commit("updateToken", response.data.token);
             // get and set auth user
             const base = {
               baseURL: this.store.state.endpoints.baseUrl,

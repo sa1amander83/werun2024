@@ -44,7 +44,7 @@ urlpatterns = [
     path('profile/',  include('profiles.urls')),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
-    path('', include('djvue.urls')),
+
 
     # path("__reload__/", include("django_browser_reload.urls")),
 ]
